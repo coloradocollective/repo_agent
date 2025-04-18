@@ -52,6 +52,14 @@ def github_tools(client: GithubClient) -> List[Tool]:
         """
         contributors = client.list_repository_contributors(full_name)
         return json.dumps(contributors)
+    @tool()
+    def list_collaborators(full_name: str) -> str:
+        """
+         all collaborators for the given repository (e.g., 'owner/repo').
+        """
+        collaborators = client.list_collaborators(full_name)
+        return json.dumps(collaborators)
+
 
     return [
         list_repositories_for_organization,
@@ -59,4 +67,5 @@ def github_tools(client: GithubClient) -> List[Tool]:
         search_repositories,
         list_repository_languages,
         list_repository_contributors,
+        list_collaborators,
     ]

@@ -156,3 +156,22 @@ class TestRepositoryAgent(unittest.TestCase):
             )],
             result.tool_calls
         )
+    @slow
+    @responses.activate
+    def test_list_collaborators(self):
+        responses.add(
+            responses.GET,
+            "https://api.github.com/repos/pytorch/pytorch/collaborators",
+            json=[{"login": "Ruban"}, {"login": "lal"}],
+            status=200,
+        )
+
+        result = self.agent.answer("Who are the collaborators for pytorch/pytorch?")
+
+        self.assertIn("Ruban", result.response)
+        self.assertIn("lal", result.response)
+        self.assertEqual(
+        [ToolCall(name="list_collaborators", arguments={"full_name": "pytorch/pytorch"})],
+        result.tool_calls
+        )
+

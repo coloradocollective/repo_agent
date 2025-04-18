@@ -99,6 +99,17 @@ class GithubClient(object):
             return []
 
         return [user["login"] for user in response.json()]
+    
+    def list_collaborators(self, full_name: str) -> List[str]:
+        response = requests.get(
+           f"https://api.github.com/repos/{full_name}/collaborators",
+           headers=self.request_headers
+    )
+        if response.status_code != 200:
+           logger.error(f"Failed to get collaborators for {full_name}: {response.text}")
+           return []
+        return [user["login"] for user in response.json()]
+
 
     @staticmethod
     def __repo_from_json(repo):
